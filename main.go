@@ -34,7 +34,6 @@ func main() {
 	q := repository.New(pool)
 
 	up := service.NewUploadService(c.SPACES_ENDPOINT, c.SPACES_TOKEN)
-
 	ps := service.NewProfileService(q)
 
 	p := rpc.NewProfileServer(ps, up, stream)
