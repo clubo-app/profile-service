@@ -14,7 +14,7 @@ type ProfileService interface {
 	Delete(ctx context.Context, id string) error
 	UsernameTaken(ctx context.Context, username string) bool
 	GetById(ctx context.Context, id string) (repository.Profile, error)
-	GetMany(ctx context.Context, ids []string, limit int32) ([]repository.Profile, error)
+	GetMany(ctx context.Context, ids []string) ([]repository.Profile, error)
 }
 
 type profileService struct {
@@ -81,10 +81,10 @@ func (s *profileService) GetById(ctx context.Context, id string) (repository.Pro
 	return p, nil
 }
 
-func (s *profileService) GetMany(ctx context.Context, ids []string, limit int32) ([]repository.Profile, error) {
+func (s *profileService) GetMany(ctx context.Context, ids []string) ([]repository.Profile, error) {
 	ps, err := s.q.GetManyProfiles(ctx, repository.GetManyProfilesParams{
 		Ids:   ids,
-		Limit: limit,
+		Limit: int32(len(ids)),
 	})
 	if err != nil {
 		return []repository.Profile{}, err

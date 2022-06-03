@@ -8,7 +8,7 @@ import (
 )
 
 func (s *profileServer) GetManyProfilesMap(ctx context.Context, req *pg.GetManyProfilesRequest) (*pg.GetManyProfilesMapResponse, error) {
-	ps, err := s.ps.GetMany(ctx, req.Ids, int32(len(req.Ids)))
+	ps, err := s.ps.GetMany(ctx, req.Ids)
 	if err != nil {
 		return nil, utils.HandleError(err)
 	}
