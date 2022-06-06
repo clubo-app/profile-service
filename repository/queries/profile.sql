@@ -10,15 +10,6 @@ INSERT INTO profiles (
 )
 RETURNING *;
 
--- name: UpdateProfile :one
-UPDATE profiles SET
-    username = $1,
-    firstname = $2,
-    lastname = $3,
-    avatar = $4
-WHERE id = $5
-RETURNING *;
-
 -- name: DeleteProfile :exec
 DELETE FROM profiles
 WHERE id = $1;

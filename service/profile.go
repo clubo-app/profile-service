@@ -18,15 +18,15 @@ type ProfileService interface {
 }
 
 type profileService struct {
-	q *repository.Queries
+	r *repository.ProfileRepository
 }
 
-func NewProfileService(q *repository.Queries) ProfileService {
-	return &profileService{q: q}
+func NewProfileService(r *repository.ProfileRepository) ProfileService {
+	return &profileService{r: r}
 }
 
 func (s *profileService) Create(ctx context.Context, dp dto.Profile) (repository.Profile, error) {
-	p, err := s.q.CreateProfile(ctx, repository.CreateProfileParams{
+	p, err := s.r.CreateProfile(ctx, repository.CreateProfileParams{
 		ID:        dp.ID,
 		Username:  dp.Username,
 		Firstname: dp.Firstname,
@@ -41,12 +41,12 @@ func (s *profileService) Create(ctx context.Context, dp dto.Profile) (repository
 }
 
 func (s *profileService) Update(ctx context.Context, dp dto.Profile) (repository.Profile, error) {
-	p, err := s.q.UpdateProfile(ctx, repository.UpdateProfileParams{
+	p, err := s.r.UpdateProfile(ctx, repository.UpdateProfileParams{
 		ID:        dp.ID,
 		Username:  dp.Username,
 		Firstname: dp.Firstname,
-		Lastname:  sql.NullString{String: dp.Lastname, Valid: dp.Lastname != ""},
-		Avatar:    sql.NullString{String: dp.Avatar, Valid: dp.Avatar != ""},
+		Lastname:  dp.Lastname,
+		Avatar:    dp.Avatar,
 	})
 	if err != nil {
 		return repository.Profile{}, err
@@ -56,7 +56,7 @@ func (s *profileService) Update(ctx context.Context, dp dto.Profile) (repository
 }
 
 func (s *profileService) Delete(ctx context.Context, id string) error {
-	err := s.q.DeleteProfile(ctx, id)
+	err := s.r.DeleteProfile(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func (s *profileService) Delete(ctx context.Context, id string) error {
 }
 
 func (s *profileService) UsernameTaken(ctx context.Context, username string) bool {
-	t, err := s.q.UsernameTaken(ctx, username)
+	t, err := s.r.UsernameTaken(ctx, username)
 	if err != nil {
 		return false
 	}
@@ -73,7 +73,7 @@ func (s *profileService) UsernameTaken(ctx context.Context, username string) boo
 }
 
 func (s *profileService) GetById(ctx context.Context, id string) (repository.Profile, error) {
-	p, err := s.q.GetProfile(ctx, id)
+	p, err := s.r.GetProfile(ctx, id)
 	if err != nil {
 		return repository.Profile{}, err
 	}
@@ -82,7 +82,7 @@ func (s *profileService) GetById(ctx context.Context, id string) (repository.Pro
 }
 
 func (s *profileService) GetMany(ctx context.Context, ids []string) ([]repository.Profile, error) {
-	ps, err := s.q.GetManyProfiles(ctx, repository.GetManyProfilesParams{
+	ps, err := s.r.GetManyProfiles(ctx, repository.GetManyProfilesParams{
 		Ids:   ids,
 		Limit: int32(len(ids)),
 	})

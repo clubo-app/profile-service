@@ -133,43 +133,6 @@ func (q *Queries) GetProfileByUsername(ctx context.Context, username string) (Pr
 	return i, err
 }
 
-const updateProfile = `-- name: UpdateProfile :one
-UPDATE profiles SET
-    username = $1,
-    firstname = $2,
-    lastname = $3,
-    avatar = $4
-WHERE id = $5
-RETURNING id, username, firstname, lastname, avatar
-`
-
-type UpdateProfileParams struct {
-	Username  string
-	Firstname string
-	Lastname  sql.NullString
-	Avatar    sql.NullString
-	ID        string
-}
-
-func (q *Queries) UpdateProfile(ctx context.Context, arg UpdateProfileParams) (Profile, error) {
-	row := q.db.QueryRow(ctx, updateProfile,
-		arg.Username,
-		arg.Firstname,
-		arg.Lastname,
-		arg.Avatar,
-		arg.ID,
-	)
-	var i Profile
-	err := row.Scan(
-		&i.ID,
-		&i.Username,
-		&i.Firstname,
-		&i.Lastname,
-		&i.Avatar,
-	)
-	return i, err
-}
-
 const usernameTaken = `-- name: UsernameTaken :one
 select exists(select 1 from profiles where username=$1) AS "exists"
 `

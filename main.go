@@ -25,16 +25,14 @@ func main() {
 	defer nc.Close()
 	stream := stream.New(nc)
 
-	pool, err := repository.NewPGXPool(c.DB_USER, c.DB_PW, c.DB_NAME, c.DB_HOST, c.DB_PORT)
+	r, err := repository.NewProfileRepository(c.DB_USER, c.DB_PW, c.DB_NAME, c.DB_HOST, c.DB_PORT)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer pool.Close()
-
-	q := repository.New(pool)
+	defer r.Close()
 
 	up := service.NewUploadService(c.SPACES_ENDPOINT, c.SPACES_TOKEN)
-	ps := service.NewProfileService(q)
+	ps := service.NewProfileService(r)
 
 	p := rpc.NewProfileServer(ps, up, stream)
 

@@ -14,7 +14,6 @@ type Querier interface {
 	GetManyProfiles(ctx context.Context, arg GetManyProfilesParams) ([]Profile, error)
 	GetProfile(ctx context.Context, id string) (Profile, error)
 	GetProfileByUsername(ctx context.Context, username string) (Profile, error)
-	UpdateProfile(ctx context.Context, arg UpdateProfileParams) (Profile, error)
 	UsernameTaken(ctx context.Context, username string) (bool, error)
 }
 
