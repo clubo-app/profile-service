@@ -1,5 +1,5 @@
 CREATE TABLE profiles (
-    id char(27) PRIMARY KEY,
+    id varchar(27) PRIMARY KEY,
     username TEXT NOT NULL,
     firstname TEXT NOT NULL,
     lastname TEXT,

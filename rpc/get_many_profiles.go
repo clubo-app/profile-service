@@ -8,6 +8,10 @@ import (
 )
 
 func (s *profileServer) GetManyProfiles(ctx context.Context, req *pg.GetManyProfilesRequest) (*pg.GetManyProfilesResponse, error) {
+	if len(req.Ids) == 0 {
+		return &pg.GetManyProfilesResponse{Profiles: []*pg.Profile{}}, nil
+	}
+
 	ps, err := s.ps.GetMany(ctx, req.Ids)
 	if err != nil {
 		return nil, utils.HandleError(err)

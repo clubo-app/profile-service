@@ -6,6 +6,8 @@ import (
 
 	"github.com/clubo-app/profile-service/dto"
 	"github.com/clubo-app/profile-service/repository"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ProfileService interface {
@@ -75,7 +77,7 @@ func (s *profileService) UsernameTaken(ctx context.Context, username string) boo
 func (s *profileService) GetById(ctx context.Context, id string) (repository.Profile, error) {
 	p, err := s.r.GetProfile(ctx, id)
 	if err != nil {
-		return repository.Profile{}, err
+		return repository.Profile{}, status.Error(codes.InvalidArgument, "No Profile found")
 	}
 
 	return p, nil
