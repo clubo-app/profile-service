@@ -23,5 +23,4 @@ func (s *profileServer) GetManyProfiles(ctx context.Context, req *pg.GetManyProf
 	}
 
 	return &pg.GetManyProfilesResponse{Profiles: profiles}, nil
-
 }

@@ -18,11 +18,9 @@ func (s *profileServer) GetManyProfilesMap(ctx context.Context, req *pg.GetManyP
 	}
 
 	profiles := make(map[string]*pg.Profile, len(ps))
-
 	for _, p := range ps {
 		profiles[p.ID] = p.ToGRPCProfile()
 	}
 
 	return &pg.GetManyProfilesMapResponse{Profiles: profiles}, nil
-
 }
