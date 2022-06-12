@@ -62,7 +62,7 @@ func (q *Queries) DeleteProfile(ctx context.Context, id string) error {
 
 const getManyProfiles = `-- name: GetManyProfiles :many
 SELECT id, username, firstname, lastname, avatar FROM profiles
-WHERE id IN($1::varchar[])
+WHERE id=ANY($1::text[])
 LIMIT $2
 `
 

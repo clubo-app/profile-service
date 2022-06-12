@@ -24,7 +24,7 @@ WHERE username = $1 LIMIT 1;
 
 -- name: GetManyProfiles :many
 SELECT * FROM profiles
-WHERE id IN(sqlc.arg('ids')::varchar[])
+WHERE id=ANY(sqlc.arg('ids')::text[])
 LIMIT sqlc.arg('limit');
 
 -- name: UsernameTaken :one
