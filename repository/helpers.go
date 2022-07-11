@@ -1,13 +1,14 @@
 package repository
 
 import (
+	"embed"
 	"fmt"
 	"net/url"
 
 	pg "github.com/clubo-app/protobuf/profile"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/pgx"
-	g "github.com/golang-migrate/migrate/v4/source/github"
+	"github.com/golang-migrate/migrate/v4/source/iofs"
 )
 
 func (p Profile) ToGRPCProfile() *pg.Profile {
@@ -22,17 +23,19 @@ func (p Profile) ToGRPCProfile() *pg.Profile {
 
 const version = 1
 
+//go:embed migrations/*.sql
+var fs embed.FS
+
 func validateSchema(url url.URL) error {
 	url.Scheme = "pgx"
-	url2 := fmt.Sprintf("%v%v", url.String(), "?sslmode=disable")
-	g := g.Github{}
-	d, err := g.Open("github://clubo-app/profile-service/repository/migrations")
+	urlf := fmt.Sprintf("%v%v", url.String(), "?sslmode=disable")
+
+	d, err := iofs.New(fs, "migrations")
 	if err != nil {
 		return err
 	}
-	defer d.Close()
 
-	m, err := migrate.NewWithSourceInstance("github", d, url2)
+	m, err := migrate.NewWithSourceInstance("github", d, urlf)
 
 	if err != nil {
 		return err
