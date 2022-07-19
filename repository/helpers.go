@@ -35,11 +35,11 @@ func validateSchema(url url.URL) error {
 		return err
 	}
 
-	m, err := migrate.NewWithSourceInstance("github", d, urlf)
-
+	m, err := migrate.NewWithSourceInstance("iofs", d, urlf)
 	if err != nil {
 		return err
 	}
+
 	err = m.Migrate(version) // current version
 	if err != nil && err != migrate.ErrNoChange {
 		return err
